@@ -7,6 +7,9 @@ A `UIControl` subclass for two-dimension directional input. Supports customizati
 github "gabrieloc/PadControl"
 ```
 
+If you prefer not using Carthage, simply copy `PadControl.swift` into your project.
+
+
 ### Example Usage
 Create an instance of `PadControl` by providing direction information (`PadDirections`). To create a unidirectional pad in your View Controller:
 ``` swift
