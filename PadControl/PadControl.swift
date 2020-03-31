@@ -118,6 +118,11 @@ public class PadControl: UIControl {
     return containerLayer.sublayers as? [CAShapeLayer]
   }
 
+  public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    self.setSelected(isSelected)
+  }
+
   public init(directions: PadDirections, planes: Int = 4) {
     self.directions = directions
     self.planeCount = planes
@@ -138,24 +143,27 @@ public class PadControl: UIControl {
 
   override public var isSelected: Bool {
     didSet {
+      setSelected(isSelected)
+    }
+  }
 
-      planes?.forEach { planeLayer in
+  func setSelected(_ isSelected: Bool) {
+    planes?.forEach { planeLayer in
 
-        let elevation = planeElevation(for: planeLayer)
-        let opacity = isSelected ? CGFloat(planeOpacity(for: elevation)) : CGFloat(1.0)
+      let elevation = planeElevation(for: planeLayer)
+      let opacity = isSelected ? CGFloat(planeOpacity(for: elevation)) : CGFloat(1.0)
 
-        let isBaseLayer = planeElevation(for: planeLayer) == 0
-        let unselectedAlpha: CGFloat = isBaseLayer ? 0.1 : 0.0
-        let fillColor = actionColor.withAlphaComponent(isSelected ? opacity : unselectedAlpha)
+      let isBaseLayer = planeElevation(for: planeLayer) == 0
+      let unselectedAlpha: CGFloat = isBaseLayer ? 0.1 : 0.0
+      let fillColor = actionColor.withAlphaComponent(isSelected ? opacity : unselectedAlpha)
 
-        planeLayer.lineWidth = 2.0
-        planeLayer.strokeColor = strokeColor.cgColor
-        planeLayer.fillColor = fillColor.cgColor
+      planeLayer.lineWidth = 2.0
+      planeLayer.strokeColor = strokeColor.cgColor
+      planeLayer.fillColor = fillColor.cgColor
 
-        if let sublayers = planeLayer.sublayers,
-          let dotLayer = sublayers.first as? CAShapeLayer {
-          dotLayer.fillColor = isSelected ? strokeColor.cgColor : actionColor.cgColor
-        }
+      if let sublayers = planeLayer.sublayers,
+        let dotLayer = sublayers.first as? CAShapeLayer {
+        dotLayer.fillColor = isSelected ? strokeColor.cgColor : actionColor.cgColor
       }
     }
   }
