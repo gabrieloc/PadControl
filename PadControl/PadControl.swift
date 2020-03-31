@@ -103,8 +103,12 @@ public class PadControl: UIControl {
   let planeCount: Int
 
   var strokeColor: UIColor {
+    if #available(iOS 13.0, *) {
+      return UIColor.systemBackground
+    }
     return .white
   }
+
   var actionColor: UIColor {
     return tintColor
   }
@@ -150,7 +154,7 @@ public class PadControl: UIControl {
 
         if let sublayers = planeLayer.sublayers,
           let dotLayer = sublayers.first as? CAShapeLayer {
-          dotLayer.fillColor = isSelected ? UIColor.white.cgColor : actionColor.cgColor
+          dotLayer.fillColor = isSelected ? strokeColor.cgColor : actionColor.cgColor
         }
       }
     }
@@ -218,7 +222,7 @@ public class PadControl: UIControl {
 
   func preparePlanes(_ count: Int) {
 
-    backgroundColor = .white
+    backgroundColor = strokeColor
 
     for i in 0..<count {
       let elevation = planeElevation(for: i)
