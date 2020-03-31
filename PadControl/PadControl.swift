@@ -47,7 +47,7 @@ public struct PadDirections: OptionSet {
 
   public static let up = PadDirections(rawValue: 1 << 0)
   public static let left = PadDirections(rawValue: 1 << 1)
-  public static let down  = PadDirections(rawValue: 1 << 2)
+  public static let down = PadDirections(rawValue: 1 << 2)
   public static let right = PadDirections(rawValue: 1 << 3)
 
   public static let all: PadDirections = [.up, .right, .down, .left]
@@ -164,7 +164,7 @@ public class PadControl: UIControl {
   @objc (planeElevationForPlane:)
   func planeElevation(for plane: CAShapeLayer) -> Elevation {
 
-    guard let index = planes?.index(of: plane) else {
+    guard let index = planes?.firstIndex(of: plane) else {
       return 0.0
     }
     return planeElevation(for: index)
@@ -204,14 +204,14 @@ public class PadControl: UIControl {
       let widthMultiplier = bi ? 0.5 : 1.0
       let xSubtract: Double = bi ? 1 : 0
       let totalValue = Double(touchPoint.x) / (width * widthMultiplier)
-      value = direction.contains(.right) ? totalValue - xSubtract : 1 - totalValue
+      value = direction.contains(.right) ? totalValue - xSubtract: 1 - totalValue
     case .y:
       let height = Double(size.height)
       let bi = directions.bidirectional(on: .y)
       let heightMultiplier = bi ? 0.5 : 1.0
       let ySubtract: Double = bi ? 1 : 0
       let totalValue = Double(touchPoint.y) / (height * heightMultiplier)
-      value = direction.contains(.down) ? totalValue - ySubtract : 1 - totalValue
+      value = direction.contains(.down) ? totalValue - ySubtract: 1 - totalValue
     }
     return clamp(value, min: 0, max: 1)
   }
@@ -263,9 +263,9 @@ public class PadControl: UIControl {
       if let sublayers = plane.sublayers, let dotLayer = sublayers.first as? CAShapeLayer {
         let r = CGFloat(dotRadius)
         let dotRect = CGRect(origin: CGPoint(x: peakOrigin.x + peakSize.width * 0.5 - r,
-                                             y: peakOrigin.y + peakSize.height * 0.5 - r),
-                             size: CGSize(width: dotRadius * 2.0,
-                                          height: dotRadius * 2.0))
+          y: peakOrigin.y + peakSize.height * 0.5 - r),
+          size: CGSize(width: dotRadius * 2.0,
+            height: dotRadius * 2.0))
         let dotPath = UIBezierPath(ovalIn: dotRect).cgPath
 
         if animated {
@@ -282,7 +282,7 @@ public class PadControl: UIControl {
     let animation = CABasicAnimation(keyPath: "path")
     animation.toValue = path
     animation.duration = duration
-    animation.fillMode = kCAFillModeForwards
+    animation.fillMode = CAMediaTimingFillMode.forwards
     shapeLayer.add(animation, forKey: nil)
     shapeLayer.path = path
   }
@@ -325,9 +325,9 @@ public class PadControl: UIControl {
     let exponent = CGFloat(isSelected ? selectionGrowthExponent : 1.0)
 
     let origin = CGPoint(x: lerp(baseOrigin.x, peakOrigin.x, elevation, exponent),
-                         y: lerp(baseOrigin.y, peakOrigin.y, elevation, exponent))
+      y: lerp(baseOrigin.y, peakOrigin.y, elevation, exponent))
     let size = CGSize(width: lerp(baseSize.width, peakSize.width, elevation, exponent),
-                      height: lerp(baseSize.height, peakSize.height, elevation, exponent))
+      height: lerp(baseSize.height, peakSize.height, elevation, exponent))
     return CGRect(origin: origin, size: size)
   }
 
@@ -379,7 +379,7 @@ public class PadControl: UIControl {
   }
 
   var restingPoint: CGPoint {
-    
+
     let rect = bounds
 
     let fullWidth = Double(rect.size.width)
